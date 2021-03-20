@@ -1,3 +1,6 @@
+import groovy.util.logging.Log
+
+@Log
 class Calculator {
     final static def INCORRECT_EXPRESSION = "Expression is incorrect. Expression: "
 
@@ -23,54 +26,54 @@ class Calculator {
             (DIVIDE)  : new int[]{5, LEFT_ASSOCIATION}
     ]
 
-    boolean isOperator(final String token) {
-        token in OPERATORS.keySet()
+    boolean isOperator(final String item) {
+        item in OPERATORS.keySet()
     }
 
-    boolean isAssociative(final String token, final int type) {
-        if (!isOperator(token)) {
-            throw new IllegalArgumentException("Invalid token: ${token}")
+    boolean isAssociative(final String item, final int type) {
+        if (!isOperator(item)) {
+            throw new IllegalArgumentException("Invalid item: ${item}")
         }
 
-        if (OPERATORS.get(token)[1] == type) {
+        if (OPERATORS.get(item)[1] == type) {
             return true
         }
 
         false
     }
 
-    int comparePrecedence(final String token1, final String token2) {
-        if (!isOperator(token1) || !isOperator(token2)) {
-            throw new IllegalArgumentException("Invalid tokens: ${token1} and/or ${token2}")
+    int comparePriority(final String item1, final String item2) {
+        if (!isOperator(item1) || !isOperator(item2)) {
+            throw new IllegalArgumentException("Invalid items: ${item1} and/or ${item2}")
         }
 
-        OPERATORS.get(token1)[0] - OPERATORS.get(token2)[0]
+        OPERATORS.get(item1)[0] - OPERATORS.get(item2)[0]
     }
 
-    String[] convertToRPN(final String[] inputTokens) {
+    String[] convertToReversePolishNotation(final String[] inputItems) {
         final List<String> out = []
         final Stack<String> stack = []
 
-        inputTokens.each { String token ->
-            if (isOperator(token)) {
+        inputItems.each { String item ->
+            if (isOperator(item)) {
                 while (!stack.empty() && isOperator(stack.peek())) {
-                    if ((isAssociative(token, LEFT_ASSOCIATION) && comparePrecedence(token, stack.peek()) <= 0) ||
-                            (isAssociative(token, RIGHT_ASSOCIATION) && comparePrecedence(token, stack.peek()) < 0)) {
+                    if ((isAssociative(item, LEFT_ASSOCIATION) && comparePriority(item, stack.peek()) <= 0) ||
+                            (isAssociative(item, RIGHT_ASSOCIATION) && comparePriority(item, stack.peek()) < 0)) {
                         out << stack.pop()
                         continue
                     }
                     break
                 }
-                stack.push(token)
-            } else if (token == LEFT_BRACKET) {
-                stack.push(token)
-            } else if (token == RIGHT_BRACKET) {
+                stack.push(item)
+            } else if (item == LEFT_BRACKET) {
+                stack.push(item)
+            } else if (item == RIGHT_BRACKET) {
                 while (!stack.empty() && stack.peek() != LEFT_BRACKET) {
                     out << stack.pop()
                 }
                 stack.pop()
             } else {
-                out << token
+                out << item
             }
         }
 
@@ -83,10 +86,10 @@ class Calculator {
         out.toArray(output)
     }
 
-    double resolveRPN(final String[] tokens) {
+    double resolveReversePolishNotation(final String[] items) {
         final Stack<String> stack = []
 
-        tokens.each {
+        items.each {
             if (!isOperator(it)) {
                 stack.push(it)
             } else {
@@ -95,15 +98,19 @@ class Calculator {
 
                 switch (it) {
                     case ADD:
+                        log.info("Operation: ${ADD}; arg1: ${bi1}; arg2: ${bi2};")
                         stack.push((bi1 + bi2).toString())
                         break
                     case SUBTRACT:
+                        log.info("Operation: ${SUBTRACT}; arg1: ${bi1}; arg2: ${bi2};")
                         stack.push((bi1 - bi2).toString())
                         break
                     case MULTIPLY:
+                        log.info("Operation: ${MULTIPLY}; arg1: ${bi1}; arg2: ${bi2};")
                         stack.push((bi1 * bi2).toString())
                         break
                     case DIVIDE:
+                        log.info("Operation: ${DIVIDE}; arg1: ${bi1}; arg2: ${bi2};")
                         stack.push((bi1 / bi2).toString())
                         break
                 }
@@ -133,8 +140,9 @@ class Calculator {
         validateExpression(expression)
 
         final def splittedExpression = expression.split(EXPRESSION_SPLIT_REGEXP)
-        final def reversePolishNotation = convertToRPN(splittedExpression)
-        final Double result = resolveRPN(reversePolishNotation)
+        final def reversePolishNotation = convertToReversePolishNotation(splittedExpression)
+        final Double result = resolveReversePolishNotation(reversePolishNotation)
+        log.info("Result: ${result}")
 
         result
     }
