@@ -99,15 +99,19 @@ class Calculator {
                 switch (it) {
                     case ADD:
                         stack.push((a + b).toString())
+                        log.info("Operation: ${ADD}; arg1: ${bi1}; arg2: ${bi2};")
                         break
                     case SUBTRACT:
                         stack.push((a - b).toString())
+                        log.info("Operation: ${SUBTRACT}; arg1: ${bi1}; arg2: ${bi2};")
                         break
                     case MULTIPLY:
                         stack.push((a * b).toString())
+                        log.info("Operation: ${MULTIPLY}; arg1: ${bi1}; arg2: ${bi2};")
                         break
                     case DIVIDE:
                         stack.push((a / b).toString())
+                        log.info("Operation: ${DIVIDE}; arg1: ${bi1}; arg2: ${bi2};")
                         break
                 }
             }
@@ -138,6 +142,7 @@ class Calculator {
         final def splittedExpression = expression.split(EXPRESSION_SPLIT_REGEXP)
         final def reversePolishNotation = convertToReversePolishNotation(splittedExpression)
         final Double result = resolveReversePolishNotation(reversePolishNotation)
+        log.info("Result: ${result}")
 
         result
     }
