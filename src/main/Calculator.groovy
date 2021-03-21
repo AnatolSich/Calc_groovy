@@ -93,8 +93,8 @@ class Calculator {
             if (!isOperator(it)) {
                 stack.push(it)
             } else {
-                final double b = stack.pop().toDouble()
-                final double a = stack.pop().toDouble()
+                final BigInteger b = stack.pop().toBigInteger()
+                final BigInteger a = stack.pop().toBigInteger()
 
                 switch (it) {
                     case ADD:
