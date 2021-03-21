@@ -3,7 +3,7 @@ import spock.lang.Specification
 class CalculatorTest extends Specification {
     final static Calculator testingInstance = new Calculator()
 
-    def "calculate expression with '+' operation"() {
+    def "Calculate expression with '+' operation"() {
         given:
         def expression = "4+15"
         when:
@@ -12,7 +12,7 @@ class CalculatorTest extends Specification {
         result == 19D
     }
 
-    def "calculate expressions with '+' operator"(final String expression, final double expectedResult) {
+    def "Calculate expressions with '+' operator"(final String expression, final double expectedResult) {
         expect:
         testingInstance.calculate(expression) == expectedResult
         where:
@@ -22,7 +22,7 @@ class CalculatorTest extends Specification {
         "100+15+10+900" | 1025D
     }
 
-    def "calculate expression with '-' operation"() {
+    def "Calculate expression with '-' operation"() {
         given:
         def expression = "20-15"
         when:
@@ -31,7 +31,7 @@ class CalculatorTest extends Specification {
         result == 5D
     }
 
-    def "calculate expressions with '-' operator"(final String expression, final double expectedResult) {
+    def "Calculate expressions with '-' operator"(final String expression, final double expectedResult) {
         expect:
         testingInstance.calculate(expression) == expectedResult
         where:
@@ -41,7 +41,7 @@ class CalculatorTest extends Specification {
         "100-15-10-30" | 45D
     }
 
-    def "calculate expression with '*' operation"() {
+    def "Calculate expression with '*' operation"() {
         given:
         def expression = "3*12"
         when:
@@ -50,7 +50,7 @@ class CalculatorTest extends Specification {
         result == 36D
     }
 
-    def "calculate expressions with '*' operator"(final String expression, final double expectedResult) {
+    def "Calculate expressions with '*' operator"(final String expression, final double expectedResult) {
         expect:
         testingInstance.calculate(expression) == expectedResult
         where:
@@ -60,7 +60,7 @@ class CalculatorTest extends Specification {
         "2*5*1*0"   | 0D
     }
 
-    def "calculate expression with '/' operation"() {
+    def "Calculate expression with '/' operation"() {
         given:
         def expression = "4/2"
         when:
@@ -69,7 +69,7 @@ class CalculatorTest extends Specification {
         result == 2D
     }
 
-    def "calculate expression with '/' operation when divide by 0"() {
+    def "Calculate expression with '/' operation when divide by 0"() {
         given:
         def expression = "4/0"
         when:
@@ -78,7 +78,7 @@ class CalculatorTest extends Specification {
         result == Double.POSITIVE_INFINITY
     }
 
-    def "calculate expressions with '/' operator"(final String expression, final double expectedResult) {
+    def "Calculate expressions with '/' operator"(final String expression, final double expectedResult) {
         expect:
         testingInstance.calculate(expression) == expectedResult
         where:
@@ -88,7 +88,7 @@ class CalculatorTest extends Specification {
         "36/2/2/3" | 3D
     }
 
-    def "calculate expressions with different operators"(final String expression, final double expectedResult) {
+    def "Calculate expressions with different operators"(final String expression, final double expectedResult) {
         expect:
         testingInstance.calculate(expression) == expectedResult
         where:
@@ -98,7 +98,7 @@ class CalculatorTest extends Specification {
         "10-2+9/3" | 11D
     }
 
-    def "calculate null expression"() {
+    def "Calculate null expression"() {
         given:
         def expression = null
         when:
@@ -108,7 +108,7 @@ class CalculatorTest extends Specification {
         thrownException.message == testingInstance.INCORRECT_EXPRESSION + expression
     }
 
-    def "calculate empty expression"() {
+    def "Calculate empty expression"() {
         given:
         def expression = ""
         when:
@@ -118,7 +118,7 @@ class CalculatorTest extends Specification {
         thrownException.message == testingInstance.INCORRECT_EXPRESSION + expression
     }
 
-    def "calculate incorrect expression with letters"() {
+    def "Calculate incorrect expression with letters"() {
         given:
         def expression = "1+a-b"
         when:
@@ -128,7 +128,7 @@ class CalculatorTest extends Specification {
         thrownException.message == testingInstance.INCORRECT_EXPRESSION + expression
     }
 
-    def "calculate incorrect expression with spaces"() {
+    def "Calculate incorrect expression with spaces"() {
         given:
         def expression = "1 + 2"
         when:
@@ -138,7 +138,7 @@ class CalculatorTest extends Specification {
         thrownException.message == testingInstance.INCORRECT_EXPRESSION + expression
     }
 
-    def "calculate incorrect expression with specific symbols"() {
+    def "Calculate incorrect expression with specific symbols"() {
         given:
         def expression = "10%2^36"
         when:
@@ -148,7 +148,7 @@ class CalculatorTest extends Specification {
         thrownException.message == testingInstance.INCORRECT_EXPRESSION + expression
     }
 
-    def "calculate incorrect expression with double numbers"() {
+    def "Calculate incorrect expression with double numbers"() {
         given:
         def expression = "10.15+36,1"
         when:
@@ -158,7 +158,7 @@ class CalculatorTest extends Specification {
         thrownException.message == testingInstance.INCORRECT_EXPRESSION + expression
     }
 
-    def "test mod operator overloading"(final String message1, final String message2, final String expectedResult) {
+    def "Test mod operator overloading"(final String message1, final String message2, final String expectedResult) {
         expect:
         use(Calculator) {
             message1 % message2 == expectedResult

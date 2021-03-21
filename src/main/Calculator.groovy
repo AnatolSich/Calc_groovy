@@ -17,9 +17,9 @@ class Calculator {
     final static def EXPRESSION_SPLIT_REGEXP = "((?<=\\*)|(?=\\*)|(?<=/)|(?=/)|(?<=\\+)|(?=\\+)|(?<=-)|(?=-)|(?<=\\()|(?=\\)))"
     final static def CHECK_SYMBOLS_REGEXP = "(?!(?:(([+-/*0-9()])+))\$).*"
     final static def CHECK_DOUBLES_REGEXP = "([0-9]+(\\.|,){1}[0-9]+)(([+-/*0-9()])+)"
-    final static def REGEXPS = [CHECK_SYMBOLS_REGEXP, CHECK_DOUBLES_REGEXP]
+    final static def REGEXPS_ARRAY = [CHECK_SYMBOLS_REGEXP, CHECK_DOUBLES_REGEXP]
 
-    final def OPERATORS = [
+    final def OPERATORS_ARRAY = [
             (ADD)     : new int[]{0, LEFT_ASSOCIATION},
             (SUBTRACT): new int[]{0, LEFT_ASSOCIATION},
             (MULTIPLY): new int[]{5, LEFT_ASSOCIATION},
@@ -27,7 +27,7 @@ class Calculator {
     ]
 
     boolean isOperator(final String item) {
-        item in OPERATORS.keySet()
+        item in OPERATORS_ARRAY.keySet()
     }
 
     boolean isAssociative(final String item, final int type) {
@@ -35,7 +35,7 @@ class Calculator {
             throw new IllegalArgumentException("Invalid item: ${item}")
         }
 
-        if (OPERATORS.get(item)[1] == type) {
+        if (OPERATORS_ARRAY.get(item)[1] == type) {
             return true
         }
 
@@ -47,19 +47,19 @@ class Calculator {
             throw new IllegalArgumentException("Invalid items: ${item1} and/or ${item2}")
         }
 
-        OPERATORS.get(item1)[0] - OPERATORS.get(item2)[0]
+        OPERATORS_ARRAY.get(item1)[0] - OPERATORS_ARRAY.get(item2)[0]
     }
 
-    String[] convertToReversePolishNotation(final String[] inputItems) {
-        final List<String> out = []
+    String[] convertToReversePolishNotation(final String[] inputItemsArray) {
+        final List<String> outputList = []
         final Stack<String> stack = []
 
-        inputItems.each { String item ->
+        inputItemsArray.each { String item ->
             if (isOperator(item)) {
                 while (!stack.empty() && isOperator(stack.peek())) {
                     if ((isAssociative(item, LEFT_ASSOCIATION) && comparePriority(item, stack.peek()) <= 0) ||
                             (isAssociative(item, RIGHT_ASSOCIATION) && comparePriority(item, stack.peek()) < 0)) {
-                        out << stack.pop()
+                        outputList << stack.pop()
                         continue
                     }
                     break
@@ -69,21 +69,21 @@ class Calculator {
                 stack.push(item)
             } else if (item == RIGHT_BRACKET) {
                 while (!stack.empty() && stack.peek() != LEFT_BRACKET) {
-                    out << stack.pop()
+                    outputList << stack.pop()
                 }
                 stack.pop()
             } else {
-                out << item
+                outputList << item
             }
         }
 
         while (!stack.empty()) {
-            out << stack.pop()
+            outputList << stack.pop()
         }
 
-        final String[] output = new String[out.size()]
+        final String[] output = new String[outputList.size()]
 
-        out.toArray(output)
+        outputList.toArray(output)
     }
 
     double resolveReversePolishNotation(final String[] items) {
@@ -121,7 +121,7 @@ class Calculator {
             throw new IllegalArgumentException(INCORRECT_EXPRESSION + expression)
         }
 
-        REGEXPS.each {
+        REGEXPS_ARRAY.each {
             if (expression ==~ it) {
                 throw new IllegalArgumentException(INCORRECT_EXPRESSION + expression)
             }
