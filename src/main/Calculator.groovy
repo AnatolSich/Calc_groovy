@@ -93,25 +93,21 @@ class Calculator {
             if (!isOperator(it)) {
                 stack.push(it)
             } else {
-                final BigInteger bi2 = stack.pop().toBigInteger()
-                final BigInteger bi1 = stack.pop().toBigInteger()
+                final double b = stack.pop().toDouble()
+                final double a = stack.pop().toDouble()
 
                 switch (it) {
                     case ADD:
-                        log.info("Operation: ${ADD}; arg1: ${bi1}; arg2: ${bi2};")
-                        stack.push((bi1 + bi2).toString())
+                        stack.push((a + b).toString())
                         break
                     case SUBTRACT:
-                        log.info("Operation: ${SUBTRACT}; arg1: ${bi1}; arg2: ${bi2};")
-                        stack.push((bi1 - bi2).toString())
+                        stack.push((a - b).toString())
                         break
                     case MULTIPLY:
-                        log.info("Operation: ${MULTIPLY}; arg1: ${bi1}; arg2: ${bi2};")
-                        stack.push((bi1 * bi2).toString())
+                        stack.push((a * b).toString())
                         break
                     case DIVIDE:
-                        log.info("Operation: ${DIVIDE}; arg1: ${bi1}; arg2: ${bi2};")
-                        stack.push((bi1 / bi2).toString())
+                        stack.push((a / b).toString())
                         break
                 }
             }
@@ -142,7 +138,6 @@ class Calculator {
         final def splittedExpression = expression.split(EXPRESSION_SPLIT_REGEXP)
         final def reversePolishNotation = convertToReversePolishNotation(splittedExpression)
         final Double result = resolveReversePolishNotation(reversePolishNotation)
-        log.info("Result: ${result}")
 
         result
     }

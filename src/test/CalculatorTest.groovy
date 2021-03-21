@@ -73,10 +73,9 @@ class CalculatorTest extends Specification {
         given:
         def expression = "4/0"
         when:
-        testingInstance.calculate(expression)
+        def result = testingInstance.calculate(expression)
         then:
-        def thrownException = thrown(ArithmeticException)
-        thrownException.message == "Division by zero"
+        result == Double.POSITIVE_INFINITY
     }
 
     def "calculate expressions with '/' operator"(final String expression, final double expectedResult) {
@@ -93,10 +92,10 @@ class CalculatorTest extends Specification {
         expect:
         testingInstance.calculate(expression) == expectedResult
         where:
-        expression          | expectedResult
-        "2+2*2"             | 6D
-        "(10-2)/4"          | 2D
-        "10-2+9/3"          | 11D
+        expression | expectedResult
+        "2+2*2"    | 6D
+        "(10-2)/4" | 2D
+        "10-2+9/3" | 11D
     }
 
     def "calculate null expression"() {
